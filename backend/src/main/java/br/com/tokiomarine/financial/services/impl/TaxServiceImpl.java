@@ -4,7 +4,6 @@ import br.com.tokiomarine.financial.domain.Transfer;
 import br.com.tokiomarine.financial.domain.dto.TransferInputDTO;
 import br.com.tokiomarine.financial.repositories.TransferRepository;
 import br.com.tokiomarine.financial.services.TaxService;
-import br.com.tokiomarine.financial.services.dto.TransferValueTax;
 import br.com.tokiomarine.financial.services.exceptions.TransferNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +31,10 @@ public class TaxServiceImpl implements TaxService {
         LocalDate schedulingDate = LocalDate.parse(transfer.getSchedulingDate());
         LocalDate transferCompletionDate = LocalDate.parse(transfer.getTransferCompletionDate());
 
-        TransferValueTax new_tax = taxTypeService.calculateTax(schedulingDate, transferCompletionDate, transfer.getTransferValue());
+        Double new_tax = taxTypeService.calculateTax(schedulingDate, transferCompletionDate, transfer.getTransferValue());
 
         Transfer transfer_new = mapper.map(transfer, Transfer.class);
-        transfer_new.setTax(new_tax.getTax());
-        transfer_new.setTotalValue(new_tax.getTransferValue());
+        transfer_new.setTax(new_tax);
         transfer_new.setSchedulingDate(schedulingDate);
         transfer_new.setTransferCompletionDate(transferCompletionDate);
 

@@ -28,8 +28,6 @@ public class Transfer {
 
     private Double tax;
 
-    private Double totalValue;
-
     private LocalDate transferCompletionDate;
 
     private LocalDate schedulingDate;

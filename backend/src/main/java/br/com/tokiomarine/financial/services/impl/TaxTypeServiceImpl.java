@@ -1,7 +1,6 @@
 package br.com.tokiomarine.financial.services.impl;
 
 import br.com.tokiomarine.financial.services.TaxTypeService;
-import br.com.tokiomarine.financial.services.dto.TransferValueTax;
 import br.com.tokiomarine.financial.services.exceptions.ImpossibleToCalculateTaxException;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +11,7 @@ import java.time.Period;
 public class TaxTypeServiceImpl implements TaxTypeService {
 
     @Override
-    public TransferValueTax calculateTax(LocalDate schedulingDate, LocalDate transferCompletionDate, Double transferValue) {
+    public Double calculateTax(LocalDate schedulingDate, LocalDate transferCompletionDate, Double transferValue) {
         Period period = Period.between(schedulingDate, transferCompletionDate);
         int daysBetween = period.getDays();
 
@@ -22,7 +21,7 @@ public class TaxTypeServiceImpl implements TaxTypeService {
                 ATaxService aTaxService = new ATaxService();
                 return aTaxService.calculate(transferValue, daysBetween);
             } else {
-                throw new ImpossibleToCalculateTaxException("There is no tax applicable to this situation in type A.");
+                throw new ImpossibleToCalculateTaxException("Não existe taxa para a data agendada.");
             }
         } else if (transferValue > 1000 && transferValue <= 2000) {
             //TaxType B
@@ -30,7 +29,7 @@ public class TaxTypeServiceImpl implements TaxTypeService {
                 BTaxService bTaxService = new BTaxService();
                 return bTaxService.calculate(transferValue, daysBetween);
             } else {
-                throw new ImpossibleToCalculateTaxException("There is no tax applicable to this situation in type B.");
+                throw new ImpossibleToCalculateTaxException("Não existe taxa para a data agendada.");
             }
         } else {
             //TaxType C
@@ -38,7 +37,7 @@ public class TaxTypeServiceImpl implements TaxTypeService {
                 CTaxService cTaxService = new CTaxService();
                 return cTaxService.calculate(transferValue, daysBetween);
             } else {
-                throw new ImpossibleToCalculateTaxException("There is no tax applicable to this situation in type C.");
+                throw new ImpossibleToCalculateTaxException("Não existe taxa para a data agendada.");
             }
         }
     }

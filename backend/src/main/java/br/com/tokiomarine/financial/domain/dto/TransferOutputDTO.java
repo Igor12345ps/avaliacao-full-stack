@@ -21,8 +21,6 @@ public class TransferOutputDTO {
 
     private Double tax;
 
-    private Double totalValue;
-
     private LocalDate transferCompletionDate;
 
     private LocalDate schedulingDate;

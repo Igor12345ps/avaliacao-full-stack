@@ -1,38 +1,30 @@
 package br.com.tokiomarine.financial.services.impl;
 
 import br.com.tokiomarine.financial.services.TaxCalcService;
-import br.com.tokiomarine.financial.services.dto.TransferValueTax;
 import org.springframework.stereotype.Service;
 
 @Service
 public class CTaxService implements TaxCalcService {
 
     @Override
-    public TransferValueTax calculate(Double transferValue, int days) {
-        TransferValueTax new_transferValue = new TransferValueTax();
+    public Double calculate(Double transferValue, int days) {
+        double specific_tax;
 
         if (days > 10 && days <= 20){
-            double tax = 8.2;
-            new_transferValue.setTransferValue(specificTaxCalculator(tax, transferValue));
-            new_transferValue.setTax(tax);
+            double percent = 8.2;
+            specific_tax = ((transferValue * percent) / 100);
         } else if (days > 20 && days <= 30){
-            double tax = 6.9;
-            new_transferValue.setTransferValue(specificTaxCalculator(tax, transferValue));
-            new_transferValue.setTax(tax);
+            double percent = 6.9;
+            specific_tax = ((transferValue * percent) / 100);
         } else if (days > 30 && days <= 40){
-            double tax = 4.7;
-            new_transferValue.setTransferValue(specificTaxCalculator(tax, transferValue));
-            new_transferValue.setTax(tax);
+            double percent = 4.7;
+            specific_tax = ((transferValue * percent) / 100);
         } else {
-            double tax = 1.7;
-            new_transferValue.setTransferValue(specificTaxCalculator(tax, transferValue));
-            new_transferValue.setTax(tax);
+            double percent = 1.7;
+            specific_tax = ((transferValue * percent) / 100);
         }
 
-        return new_transferValue;
+        return specific_tax;
     }
 
-    private Double specificTaxCalculator(Double tax, Double transferValue){
-        return transferValue - ((transferValue * tax) / 100);
-    }
 }
