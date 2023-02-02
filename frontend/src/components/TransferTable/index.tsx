@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import DataTable, { TableColumn } from "react-data-table-component";
 import { Button, Input } from "semantic-ui-react";
 import { Transfer } from "../../models/transfer";
-import ModalC from "../Modal";
+import ModalTransfer from "../Modal/Transfer";
 
 type Props = {
   data: Transfer[];
@@ -69,43 +69,43 @@ const TransferTable = ({ data }: Props) => {
       name: "#",
       selector: (row) => row.id,
       sortable: true,
-      reorder: true
+      reorder: true,
     },
     {
       name: "Conta de Origem",
       selector: (row) => row.originAccount,
       sortable: false,
-      reorder: true
+      reorder: true,
     },
     {
       name: "Conta de Destino",
       selector: (row) => row.destinationAccount,
       sortable: false,
-      reorder: true
+      reorder: true,
     },
     {
       name: "Valor da Transferência",
       selector: (row) => row.transferValue,
       sortable: true,
-      reorder: true
+      reorder: true,
     },
     {
       name: "Taxa",
       selector: (row) => row.tax,
       sortable: true,
-      reorder: true
+      reorder: true,
     },
     {
       name: "Data de Transferência",
       selector: (row) => row.transferCompletionDate,
       sortable: false,
-      reorder: true
+      reorder: true,
     },
     {
       name: "Data de Agendamento",
       selector: (row) => row.schedulingDate,
       sortable: false,
-      reorder: true
+      reorder: true,
     },
   ];
 
@@ -137,7 +137,7 @@ const TransferTable = ({ data }: Props) => {
               onChange={(t) => setSearch(t.target.value)}
             />
             <Button
-              color="blue"
+              color="black"
               content="Nova Transferência"
               icon="plus"
               onClick={openModal}
@@ -146,7 +146,7 @@ const TransferTable = ({ data }: Props) => {
         }
         subHeaderWrap
       />
-      <ModalC show={modal} />
+      <ModalTransfer show={modal} />
     </>
   );
 };
