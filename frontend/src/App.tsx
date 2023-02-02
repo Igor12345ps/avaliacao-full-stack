@@ -30,6 +30,14 @@ function App() {
     }, 10);
   };
 
+  const reloadList = () => {
+    const getTransfers = async () => {
+      const new_transfers = await api.getAllTransfers();
+      setTransfers(new_transfers);
+    };
+    getTransfers();
+  }
+
   return (
     <>
       <HeaderC />
@@ -64,6 +72,18 @@ function App() {
           </div>
         </div>
       </section>
+
+      <div className="w-full flex flex-col items-center mt-4">
+        <div className="w-5/6">
+          <Button
+            color="black"
+            content="Atualizar a Lista"
+            icon="redo"
+            onClick={reloadList}
+            fluid
+          />
+        </div>
+      </div>
 
       <section className="w-full flex flex-col items-center">
         <div className="w-5/6">

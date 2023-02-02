@@ -1,17 +1,22 @@
 import { Button, Form, Header, Icon, Message, Modal } from "semantic-ui-react";
 import { useEffect, useState } from "react";
 import moment from "moment";
+import transfersAPI from "../../../helpers/transferRequest";
+import { Transfer } from "../../../models/transfer";
 
 type Props = {
   show: boolean;
 };
 
 const ModalTransfer = ({ show }: Props) => {
+  const api = transfersAPI();
+
   const [opened, setOpened] = useState(false);
 
   const [originAccount, setOriginAccount] = useState("");
   const [destinationAccount, setDestinationAccount] = useState("");
   const [transferValue, setTransferValue] = useState("");
+  const [transferCompletionDate, setTransferCompletionDate] = useState("");
   const [schedulingDate, setSchedulingDate] = useState("");
 
   const [transferValueErrorMessage, setTransferValueErrorMessage] =
@@ -24,6 +29,8 @@ const ModalTransfer = ({ show }: Props) => {
     useState("");
 
   const [dateErrorMessage, setDateErrorMessage] = useState("");
+
+  const [submitErrorMessage, setSubmitErrorMessage] = useState("");
 
   useEffect(() => {
     if (show == true) {
@@ -50,6 +57,7 @@ const ModalTransfer = ({ show }: Props) => {
   }
 
   const validateAccountNumber = (t: string, type: AccountEnum) => {
+    setSubmitErrorMessage("");
     switch (type) {
       case AccountEnum.ORIGIN:
         if (t == "" || isNaN(t) || t.length < 6) {
@@ -76,11 +84,10 @@ const ModalTransfer = ({ show }: Props) => {
   };
 
   const validateTransferValue = (t: string) => {
+    setSubmitErrorMessage("");
     const transformToDot = t.replace(",", ".");
     if (t == "" || isNaN(transformToDot)) {
-      setTransferValueErrorMessage(
-        "Valor da transferência inválido!"
-      );
+      setTransferValueErrorMessage("Valor da transferência inválido!");
       setTransferValue(transformToDot);
     } else {
       setTransferValue(transformToDot);
@@ -89,20 +96,44 @@ const ModalTransfer = ({ show }: Props) => {
   };
 
   const validateDate = (t: string) => {
+    setSubmitErrorMessage("");
     const today_milliseconds = Date.now();
     const today_date = new Date(today_milliseconds).toISOString().split("T")[0];
+    setSchedulingDate(today_date);
     if (moment(t).isBefore(today_date)) {
-      setDateErrorMessage("A data de transferência precisa ser hoje ou no futuro!");
-      setSchedulingDate(t);
+      setDateErrorMessage(
+        "A data de transferência precisa ser hoje ou no futuro!"
+      );
+      setTransferCompletionDate(t);
     } else {
-      setSchedulingDate(t);
+      setTransferCompletionDate(t);
       setDateErrorMessage("");
     }
   };
 
   const requestTransfer = () => {
-    
-  }
+    if (
+      OriginAccountErrorMessage == "" &&
+      destinationAccountErrorMessage == "" &&
+      transferValueErrorMessage == "" &&
+      dateErrorMessage == ""
+    ) {
+      const postTransfer = async () => {
+        const new_transfer: Transfer = {
+          originAccount: originAccount,
+          destinationAccount: destinationAccount,
+          transferValue: Number(transferValue),
+          transferCompletionDate: transferCompletionDate,
+          schedulingDate: schedulingDate
+        }
+        await api.postTransference(new_transfer);
+        setOpened(false);
+      };
+      postTransfer();
+    } else {
+      setSubmitErrorMessage("Os campos estão vazios!")
+    }
+  };
 
   return (
     <Modal
@@ -121,7 +152,8 @@ const ModalTransfer = ({ show }: Props) => {
         {(OriginAccountErrorMessage != "" ||
           destinationAccountErrorMessage != "" ||
           transferValueErrorMessage != "" ||
-          dateErrorMessage != "") && (
+          dateErrorMessage != "" ||
+          submitErrorMessage != "" ) && (
           <Message
             error
             header="Preencha o formulário corretamente:"
@@ -148,6 +180,12 @@ const ModalTransfer = ({ show }: Props) => {
                 {dateErrorMessage != "" && (
                   <>
                     <span>- {dateErrorMessage}</span>
+                    <br />
+                  </>
+                )}
+                {submitErrorMessage != "" && (
+                  <>
+                    <span>- {submitErrorMessage}</span>
                     <br />
                   </>
                 )}
@@ -204,7 +242,7 @@ const ModalTransfer = ({ show }: Props) => {
               type="date"
               onChange={(t) => validateDate(t.target.value)}
               error={dateErrorMessage != ""}
-              value={schedulingDate}
+              value={transferCompletionDate}
             />
           </Form.Group>
         </Form>
@@ -213,7 +251,7 @@ const ModalTransfer = ({ show }: Props) => {
         <Button color="red" onClick={() => setOpened(false)}>
           <Icon name="remove" /> Sair
         </Button>
-        <Button color="green" onClick={null}>
+        <Button color="green" onClick={requestTransfer}>
           <Icon name="dollar sign" /> Transferir
         </Button>
       </Modal.Actions>
