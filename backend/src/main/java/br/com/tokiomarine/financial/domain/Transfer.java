@@ -1,9 +1,6 @@
 package br.com.tokiomarine.financial.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,9 +17,13 @@ public class Transfer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String originAccount;
+    @ManyToOne
+    @JoinColumn(name = "origin_account_id", nullable = false)
+    private Account originAccount;
 
-    private String destinationAccount;
+    @ManyToOne
+    @JoinColumn(name = "destination_account_id", nullable = false)
+    private Account destinationAccount;
 
     private Double transferValue;
 

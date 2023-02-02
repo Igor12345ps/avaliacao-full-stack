@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TransferInputDTO {
 
-    private String originAccount;
+    private int originAccount;
 
-    private String destinationAccount;
+    private int destinationAccount;
 
     private Double transferValue;
 

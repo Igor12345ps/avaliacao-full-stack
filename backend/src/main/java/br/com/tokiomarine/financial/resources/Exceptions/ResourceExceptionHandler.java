@@ -1,5 +1,6 @@
 package br.com.tokiomarine.financial.resources.Exceptions;
 
+import br.com.tokiomarine.financial.services.exceptions.AccountNotFoundException;
 import br.com.tokiomarine.financial.services.exceptions.ImpossibleToCalculateTaxException;
 import br.com.tokiomarine.financial.services.exceptions.TransferNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,6 +26,16 @@ public class ResourceExceptionHandler {
 
     @ExceptionHandler(TransferNotFoundException.class)
     public ResponseEntity<StandardError> objectNotFound(TransferNotFoundException ex, HttpServletRequest request){
+        StandardError error = new StandardError(LocalDateTime.now(),
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(AccountNotFoundException.class)
+    public ResponseEntity<StandardError> accountNotFound(TransferNotFoundException ex, HttpServletRequest request){
         StandardError error = new StandardError(LocalDateTime.now(),
                 HttpStatus.NOT_FOUND.value(),
                 ex.getMessage(),

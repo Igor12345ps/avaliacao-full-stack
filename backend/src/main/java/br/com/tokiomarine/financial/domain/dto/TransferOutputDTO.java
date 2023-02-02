@@ -13,9 +13,9 @@ public class TransferOutputDTO {
 
     private Long id;
 
-    private String originAccount;
+    private int originAccount;
 
-    private String destinationAccount;
+    private int destinationAccount;
 
     private Double transferValue;
 

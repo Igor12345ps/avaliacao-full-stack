@@ -1,5 +1,6 @@
 package br.com.tokiomarine.financial.resources;
 
+import br.com.tokiomarine.financial.domain.Transfer;
 import br.com.tokiomarine.financial.domain.dto.TransferInputDTO;
 import br.com.tokiomarine.financial.domain.dto.TransferOutputDTO;
 import br.com.tokiomarine.financial.services.impl.TaxServiceImpl;
@@ -23,7 +24,17 @@ public class TransferResource {
 
     @PostMapping
     public ResponseEntity<?> quote(@RequestBody TransferInputDTO transfer) {
-        return ResponseEntity.ok().body(mapper.map(taxService.quote(transfer), TransferOutputDTO.class));
+        Transfer transferDone = taxService.quote(transfer);
+        TransferOutputDTO transferOutputDTO = new TransferOutputDTO();
+        transferOutputDTO.setOriginAccount(transferDone.getOriginAccount().getNumber());
+        transferOutputDTO.setDestinationAccount(transferDone.getDestinationAccount().getNumber());
+        transferOutputDTO.setId(transferDone.getId());
+        transferOutputDTO.setTransferValue(transferDone.getTransferValue());
+        transferOutputDTO.setTax(transferDone.getTax());
+        transferOutputDTO.setTransferCompletionDate(transferDone.getTransferCompletionDate());
+        transferOutputDTO.setSchedulingDate(transferDone.getSchedulingDate());
+
+        return ResponseEntity.ok().body(transferOutputDTO);
     }
 
     @GetMapping("/{id}")
