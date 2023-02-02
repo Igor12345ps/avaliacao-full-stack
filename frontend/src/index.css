@@ -1,9 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap");
 
 * {
+  font-family: "Roboto", sans-serif;
+  box-sizing: border-box;
   margin: 0;
-	padding: 0;
-	border: 0;
+  padding: 0;
+}
+
+body,
+html {
+  /* color: #fff; */
+}
+
+a,
+a:hover,
+a:visited {
+  color: unset;
+  text-decoration: none;
 }

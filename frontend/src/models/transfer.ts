@@ -1,10 +1,9 @@
 export type Transfer = {
-    id: number;
+    id?: number;
     originAccount: string;
     destinationAccount: string;
     transferValue: number;
-    tax: number;
-    totalValue: number;
+    tax?: number;
     transferCompletionDate: string;
     schedulingDate: string;
 }
