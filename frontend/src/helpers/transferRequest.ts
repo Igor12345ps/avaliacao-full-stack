@@ -30,10 +30,12 @@ const transfersAPI = {
     axios
       .post(`${BASE_URL}/transfers`, transfer)
       .then((response) => {
+        toast.success("Transferência efetuada! Espere alguns segundos para a tabela recarregar.");
         return response.data;
       })
       .catch((error) => {
         toast.error(error.response.data.error);
+        return null;
       });
   }
 }

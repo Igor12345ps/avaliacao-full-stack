@@ -1,8 +1,10 @@
 import { Button, Form, Header, Icon, Message, Modal } from "semantic-ui-react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import moment from "moment";
 import transfersAPI from "../../../helpers/transferRequest";
 import { Transfer } from "../../../models/transfer";
+import { TransfersContext } from "../../../context/TransfersContext";
+import { toast } from "react-toastify";
 
 type Props = {
   show: boolean;
@@ -10,6 +12,8 @@ type Props = {
 
 const ModalTransfer = ({ show }: Props) => {
   const api = transfersAPI();
+
+  const { transfers, setTransfers } = useContext(TransfersContext);
 
   const [opened, setOpened] = useState(false);
 
@@ -46,6 +50,7 @@ const ModalTransfer = ({ show }: Props) => {
       setDestinationAccountErrorMessage("");
       setTransferValue("");
       setTransferValueErrorMessage("");
+      setTransferCompletionDate("");
       setSchedulingDate("");
       setDateErrorMessage("");
     }
@@ -60,8 +65,10 @@ const ModalTransfer = ({ show }: Props) => {
     setSubmitErrorMessage("");
     switch (type) {
       case AccountEnum.ORIGIN:
-        if (t == "" || isNaN(t) || t.length < 6) {
-          setOriginAccountErrorMessage("Número da conta de origem inválido!");
+        if (t == "" || isNaN(t) || t.length < 6 || t.length > 6) {
+          setOriginAccountErrorMessage(
+            "Número da conta de origem inválido! O número de algarismos da conta tem que ser igual a 6."
+          );
           setOriginAccount(t);
         } else {
           setOriginAccount(t);
@@ -70,9 +77,9 @@ const ModalTransfer = ({ show }: Props) => {
         break;
 
       case AccountEnum.DESTINATION:
-        if (t == "" || isNaN(t) || t.length < 6) {
+        if (t == "" || isNaN(t) || t.length < 6 || t.length > 6) {
           setDestinationAccountErrorMessage(
-            "Número da conta de destino inválido!"
+            "Número da conta de origem inválido! O número de algarismos da conta tem que ser igual a 6."
           );
           setDestinationAccount(t);
         } else {
@@ -124,14 +131,25 @@ const ModalTransfer = ({ show }: Props) => {
           destinationAccount: destinationAccount,
           transferValue: Number(transferValue),
           transferCompletionDate: transferCompletionDate,
-          schedulingDate: schedulingDate
-        }
+          schedulingDate: schedulingDate,
+        };
         await api.postTransference(new_transfer);
-        setOpened(false);
       };
-      postTransfer();
+      postTransfer().then(() => {
+        const getTransfers = async () => {
+          return await api.getAllTransfers();
+        };
+        setTimeout(() => {
+          getTransfers().then((new_transfers) => {
+            setTransfers(new_transfers);
+            toast.success("Transferências atualizadas!");
+          });
+        }, 3000);
+
+        setOpened(false);
+      });
     } else {
-      setSubmitErrorMessage("Os campos estão vazios!")
+      setSubmitErrorMessage("Os campos estão vazios!");
     }
   };
 
@@ -153,7 +171,7 @@ const ModalTransfer = ({ show }: Props) => {
           destinationAccountErrorMessage != "" ||
           transferValueErrorMessage != "" ||
           dateErrorMessage != "" ||
-          submitErrorMessage != "" ) && (
+          submitErrorMessage != "") && (
           <Message
             error
             header="Preencha o formulário corretamente:"

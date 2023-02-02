@@ -1,22 +1,20 @@
-import { useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import DataTable, { TableColumn } from "react-data-table-component";
 import { Button, Input } from "semantic-ui-react";
+import { TransfersContext } from "../../context/TransfersContext";
 import { Transfer } from "../../models/transfer";
 import ModalTransfer from "../Modal/Transfer";
 
-type Props = {
-  data: Transfer[];
-};
-
-const TransferTable = ({ data }: Props) => {
+const TransferTable = () => {
+  const {transfers} = useContext(TransfersContext);
   const [dataApi, setDataApi] = useState<Transfer[]>([]);
   const [dataSearch, setDataSearch] = useState<Transfer[]>([]);
   const [search, setSearch] = useState("");
   const [modal, setModal] = useState(false);
 
   useEffect(() => {
-    setDataApi(data);
-  }, [data]);
+    setDataApi(transfers);
+  }, [transfers]);
 
   useEffect(() => {
     const dataSearchMask = dataApi;
@@ -30,6 +28,13 @@ const TransferTable = ({ data }: Props) => {
       dataSearchMask[key].schedulingDate = schedulingDateNew;
     });
     setDataSearch(dataSearchMask);
+
+    const taxFixedMask = dataApi;
+    dataApi.map((value, key) => {
+      let taxNew = value.tax?.toFixed(3);
+      taxFixedMask[key].tax = taxNew;
+    });
+    setDataSearch(taxFixedMask);
   }, [dataApi]);
 
   useEffect(() => {
@@ -51,7 +56,7 @@ const TransferTable = ({ data }: Props) => {
       });
       setDataSearch(filter);
     } else {
-      setDataSearch(data);
+      setDataSearch(transfers);
     }
   }, [search]);
 
