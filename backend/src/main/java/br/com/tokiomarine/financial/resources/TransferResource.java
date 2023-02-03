@@ -3,8 +3,7 @@ package br.com.tokiomarine.financial.resources;
 import br.com.tokiomarine.financial.domain.Transfer;
 import br.com.tokiomarine.financial.domain.dto.TransferInputDTO;
 import br.com.tokiomarine.financial.domain.dto.TransferOutputDTO;
-import br.com.tokiomarine.financial.services.impl.TaxServiceImpl;
-import org.modelmapper.ModelMapper;
+import br.com.tokiomarine.financial.services.impl.TransferServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,15 +15,12 @@ import java.util.List;
 public class TransferResource {
 
     @Autowired
-    private ModelMapper mapper;
-
-    @Autowired
-    private TaxServiceImpl taxService;
+    private TransferServiceImpl taxService;
 
 
     @PostMapping
     public ResponseEntity<?> quote(@RequestBody TransferInputDTO transfer) {
-        Transfer transferDone = taxService.quote(transfer);
+        Transfer transferDone = taxService.transfer(transfer);
         TransferOutputDTO transferOutputDTO = new TransferOutputDTO();
         transferOutputDTO.setOriginAccount(transferDone.getOriginAccount().getNumber());
         transferOutputDTO.setDestinationAccount(transferDone.getDestinationAccount().getNumber());
@@ -37,14 +33,20 @@ public class TransferResource {
         return ResponseEntity.ok().body(transferOutputDTO);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<TransferOutputDTO> getQuotationById(@PathVariable Long id) {
-        return ResponseEntity.ok().body(mapper.map(taxService.getQuotationById(id), TransferOutputDTO.class));
-    }
-
     @GetMapping
     public ResponseEntity<List<TransferOutputDTO>> getAll(){
-        return ResponseEntity.ok().body(taxService.getAll().stream().map(x -> mapper.map(x, TransferOutputDTO.class)).toList());
+        return ResponseEntity.ok().body(taxService.getAll().stream()
+                .map(x -> {
+                    TransferOutputDTO transferOutputDTO = new TransferOutputDTO();
+                    transferOutputDTO.setOriginAccount(x.getOriginAccount().getNumber());
+                    transferOutputDTO.setDestinationAccount(x.getDestinationAccount().getNumber());
+                    transferOutputDTO.setId(x.getId());
+                    transferOutputDTO.setTransferValue(x.getTransferValue());
+                    transferOutputDTO.setTax(x.getTax());
+                    transferOutputDTO.setTransferCompletionDate(x.getTransferCompletionDate());
+                    transferOutputDTO.setSchedulingDate(x.getSchedulingDate());
+                    return transferOutputDTO;
+                }).toList());
     }
 
 }

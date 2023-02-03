@@ -4,9 +4,8 @@ import br.com.tokiomarine.financial.domain.Account;
 import br.com.tokiomarine.financial.domain.Transfer;
 import br.com.tokiomarine.financial.domain.dto.TransferInputDTO;
 import br.com.tokiomarine.financial.repositories.TransferRepository;
-import br.com.tokiomarine.financial.services.TaxService;
+import br.com.tokiomarine.financial.services.TransferService;
 import br.com.tokiomarine.financial.services.exceptions.AccountNotFoundException;
-import br.com.tokiomarine.financial.services.exceptions.TransferNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class TaxServiceImpl implements TaxService {
+public class TransferServiceImpl implements TransferService {
 
     @Autowired
     private ModelMapper mapper;
@@ -31,7 +30,7 @@ public class TaxServiceImpl implements TaxService {
     private TransferRepository transferRepository;
 
     @Override
-    public Transfer quote(TransferInputDTO transfer) {
+    public Transfer transfer(TransferInputDTO transfer) {
 
         LocalDate schedulingDate = LocalDate.parse(transfer.getSchedulingDate());
         LocalDate transferCompletionDate = LocalDate.parse(transfer.getTransferCompletionDate());
@@ -64,12 +63,6 @@ public class TaxServiceImpl implements TaxService {
 
 
         return transferRepository.save(transfer_new);
-    }
-
-    @Override
-    public Transfer getQuotationById(Long id) {
-        Optional<Transfer> transfer = transferRepository.findById(id);
-        return transfer.orElseThrow(() -> new TransferNotFoundException("Transfer not found by id."));
     }
 
     @Override

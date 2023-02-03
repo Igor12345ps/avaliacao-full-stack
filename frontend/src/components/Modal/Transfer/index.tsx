@@ -104,10 +104,12 @@ const ModalTransfer = ({ show }: Props) => {
 
   const validateDate = (t: string) => {
     setSubmitErrorMessage("");
-    const today_milliseconds = Date.now();
-    const today_date = new Date(today_milliseconds).toISOString().split("T")[0];
-    setSchedulingDate(today_date);
-    if (moment(t).isBefore(today_date)) {
+
+    const date = moment();
+    const current_date = date.format('YYYY-MM-DD');
+
+    setSchedulingDate(current_date);
+    if (moment(t).isBefore(current_date)) {
       setDateErrorMessage(
         "A data de transferência precisa ser hoje ou no futuro!"
       );

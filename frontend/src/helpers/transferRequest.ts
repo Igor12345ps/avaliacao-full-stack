@@ -4,6 +4,30 @@ import { BASE_URL } from "../utils/request";
 import { Transfer } from "../models/transfer";
 
 const transfersAPI = {
+
+  getAllAccounts: async (): Promise<any> => {
+    return await axios
+      .get(`${BASE_URL}/accounts`)
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        toast.error(error.response.data.error);
+      });
+  },
+
+  createAccount: async (): Promise<any> => {
+    return axios
+      .post(`${BASE_URL}/accounts`)
+      .then((response) => {
+        return response.data.number;
+      })
+      .catch((error) => {
+        toast.error(error.response.data.error);
+        return null;
+      });
+  },
+
   getAllTransfers: async (): Promise<any> => {
     return await axios
       .get(`${BASE_URL}/transfers`)

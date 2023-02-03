@@ -30,9 +30,9 @@ const TransferTable = () => {
     setDataSearch(dataSearchMask);
 
     const taxFixedMask = dataApi;
-    dataApi.map((value, key) => {
+    dataApi?.map((value, key) => {
       let taxNew = value.tax?.toFixed(3);
-      taxFixedMask[key].tax = taxNew;
+      taxFixedMask[key].tax = Number(taxNew);
     });
     setDataSearch(taxFixedMask);
   }, [dataApi]);
@@ -58,7 +58,7 @@ const TransferTable = () => {
     } else {
       setDataSearch(transfers);
     }
-  }, [search]);
+  }, [search, transfers]);
 
   const maskDate = (date_string: string[]): string => {
     let date_string_year = date_string[0];

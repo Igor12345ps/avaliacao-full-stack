@@ -5,11 +5,9 @@ import br.com.tokiomarine.financial.domain.dto.TransferInputDTO;
 
 import java.util.List;
 
-public interface TaxService {
+public interface TransferService {
 
-    Transfer quote(TransferInputDTO transfer);
-
-    Transfer getQuotationById(Long id);
+    Transfer transfer(TransferInputDTO transfer);
 
     List<Transfer> getAll();
 

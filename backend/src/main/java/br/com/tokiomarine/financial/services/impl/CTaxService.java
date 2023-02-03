@@ -8,7 +8,7 @@ public class CTaxService implements TaxCalcService {
 
     @Override
     public Double calculate(Double transferValue, int days) {
-        double specific_tax;
+        double specific_tax = 0;
 
         if (days > 10 && days <= 20){
             double percent = 8.2;
@@ -19,7 +19,7 @@ public class CTaxService implements TaxCalcService {
         } else if (days > 30 && days <= 40){
             double percent = 4.7;
             specific_tax = ((transferValue * percent) / 100);
-        } else {
+        } else if (days > 40){
             double percent = 1.7;
             specific_tax = ((transferValue * percent) / 100);
         }

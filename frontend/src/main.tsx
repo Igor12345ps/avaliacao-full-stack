@@ -7,6 +7,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { TransfersProvider } from "./context/TransfersContext";
+import { AccountsProvider } from "./context/AccountsContext";
 import Home from "./routes/Home/Home";
 import Accounts from "./routes/Accounts/Accounts";
 import Error from "./routes/Error/Error";
@@ -26,8 +27,10 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <>
     <TransfersProvider>
-      <ToastContainer />
-      <RouterProvider router={router} />
+      <AccountsProvider>
+        <ToastContainer />
+        <RouterProvider router={router} />
+      </AccountsProvider>
     </TransfersProvider>
   </>
 );

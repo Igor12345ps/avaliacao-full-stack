@@ -5,15 +5,17 @@ import br.com.tokiomarine.financial.services.exceptions.ImpossibleToCalculateTax
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.time.Period;
+import java.time.temporal.ChronoUnit;
 
 @Service
 public class TaxTypeServiceImpl implements TaxTypeService {
 
     @Override
     public Double calculateTax(LocalDate schedulingDate, LocalDate transferCompletionDate, Double transferValue) {
-        Period period = Period.between(schedulingDate, transferCompletionDate);
-        int daysBetween = period.getDays();
+//        Period period = Period.between(schedulingDate, transferCompletionDate);
+//        int daysBetween = period.getDays();
+
+        int daysBetween = (int) ChronoUnit.DAYS.between(schedulingDate, transferCompletionDate);
 
         if(transferValue <= 1000){
             //TaxType A

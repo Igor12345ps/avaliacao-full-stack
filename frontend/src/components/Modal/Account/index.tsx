@@ -1,14 +1,22 @@
 import { Button, Header, Icon, Modal, Progress } from "semantic-ui-react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import transfersAPI from "../../../helpers/transferRequest";
+import { Link } from "react-router-dom";
+import { AccountsContext } from "../../../context/AccountsContext";
 
 type Props = {
   show: boolean;
 };
 
 const ModalAccount = ({ show }: Props) => {
+  const api = transfersAPI();
+
+  const { accounts, setAccounts } = useContext(AccountsContext);
   const [opened, setOpened] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [accountNumber, setAccountNumber] = useState("123456");
+  const [loading, setLoading] = useState(false);
+  const [createAccountButton, setCreateAccountButton] = useState(true);
+  const [accountNumber, setAccountNumber] = useState(null);
+
 
   useEffect(() => {
     if (show == true) {
@@ -17,11 +25,36 @@ const ModalAccount = ({ show }: Props) => {
   }, [show]);
 
   useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
+    if (opened == false) {
+      setAccountNumber(null);
       setLoading(false);
-    }, 1500);
-  }, [show]);
+      setCreateAccountButton(true);
+    }
+  }, [opened]);
+
+  const generateAccount = () => {
+    setCreateAccountButton(false);
+    setLoading(true);
+    const createAccount = async () => {
+      return await api.createAccount();
+    };
+
+    setTimeout(() => {
+      createAccount().then((res) => {
+        setAccountNumber(res);
+        setLoading(false);
+      });
+    }, 2000);
+  };
+
+  const updateAndClose = () => {
+    const getAccounts = async () => {
+      const new_accounts = await api.getAllAccounts();
+      setAccounts(new_accounts);
+    };
+    getAccounts();
+    setOpened(false)
+  }
 
   return (
     <Modal
@@ -36,6 +69,16 @@ const ModalAccount = ({ show }: Props) => {
           Para realizar transferências bancárias, é necessário o número da
           conta. <br />O número da sua conta é:
         </p>
+
+        {createAccountButton && (
+          <Button
+            color="black"
+            content="Criar conta"
+            icon="plus"
+            onClick={generateAccount}
+            fluid
+          />
+        )}
         {loading && (
           <Progress percent={100} indicating>
             Gerando número da conta...
@@ -53,9 +96,11 @@ const ModalAccount = ({ show }: Props) => {
         <Button color="red" onClick={() => setOpened(false)}>
           <Icon name="remove" /> Sair
         </Button>
-        <Button color="green" onClick={null}>
-          <Icon name="checkmark" /> Ver todas as contas
-        </Button>
+        <Link to="/accounts">
+          <Button color="green" onClick={updateAndClose}>
+            <Icon name="checkmark" /> Ver todas as contas
+          </Button>
+        </Link>
       </Modal.Actions>
     </Modal>
   );
