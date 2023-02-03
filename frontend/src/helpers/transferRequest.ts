@@ -4,7 +4,6 @@ import { BASE_URL } from "../utils/request";
 import { Transfer } from "../models/transfer";
 
 const transfersAPI = {
-
   getAllAccounts: async (): Promise<any> => {
     return await axios
       .get(`${BASE_URL}/accounts`)
@@ -54,14 +53,20 @@ const transfersAPI = {
     axios
       .post(`${BASE_URL}/transfers`, transfer)
       .then((response) => {
-        toast.success("Transferência efetuada! Espere alguns segundos para a tabela recarregar.");
+        toast.success(
+          "Transferência efetuada! Espere alguns segundos para a tabela recarregar."
+        );
         return response.data;
       })
       .catch((error) => {
-        toast.error(error.response.data.error);
+        if (error.response.data.status == 500) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error(error.response.data.error);
+        }
         return null;
       });
-  }
-}
+  },
+};
 
 export default () => transfersAPI;

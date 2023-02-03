@@ -46,13 +46,13 @@ public class TransferServiceImpl implements TransferService {
         if(originAccount.isPresent()){
             transfer_new.setOriginAccount(originAccount.get());
         } else {
-            throw new AccountNotFoundException("Origin account number does not exist.");
+            throw new AccountNotFoundException("A conta de origem não existe.");
         }
 
         if(destinationAccount.isPresent()){
             transfer_new.setDestinationAccount(destinationAccount.get());
         } else {
-            throw new AccountNotFoundException("Destination account number does not exist.");
+            throw new AccountNotFoundException("A conta de destino não existe.");
         }
 
 
