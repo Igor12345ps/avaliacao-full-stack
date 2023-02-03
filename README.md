@@ -64,7 +64,7 @@ Primeiramente, baixe o projeto na sua máquina da seguinte forma:
 
 1. Copie o link deste repositório:
 
-![Tutorial de como copiar link do repositorio github](url)
+![Tutorial de como copiar link do repositorio github](https://github.com/Igor12345ps/avaliacao-full-stack/blob/main/assets/como-clonar-rep.gif)
 
 2. Crie uma pasta no seu computador, abra o terminal do git (git bash) nessa pasta e execute o seguinte comando inserindo o link da etapa acima sem os sinais <>:
     
@@ -72,7 +72,7 @@ Primeiramente, baixe o projeto na sua máquina da seguinte forma:
 
 3. Inicie o backend, importando-o na sua IDE de preferência como projeto Maven, depois execute a classe FinancialApplication.java.
 
-![Tutorial de como iniciar a aplicação do backend](url)
+![Tutorial de como iniciar a aplicação do backend](https://github.com/Igor12345ps/avaliacao-full-stack/blob/main/assets/backend-%E2%80%93-FinancialApplication.java.gif)
 
 4. Agora, inicie o frontend abrindo o terminal de comando na pasta principal do projeto e digite os seguintes comandos no terminal:
 
@@ -95,7 +95,7 @@ Para visualizar o *Swagger* do backend, entre no seu navegador e digite:
 # Detalhes do Backend
 
 ## Endpoints de Transferência:
-![transfer-resource requests](url)
+![transfer-resource requests](https://github.com/Igor12345ps/avaliacao-full-stack/blob/main/assets/transfers-requests-backend-swagger.png)
 
 Método | Endpoint | Função
 ---------|---------- | ----------
@@ -103,7 +103,7 @@ Método | Endpoint | Função
 **POST** | */transfers* | Realiza uma nova transferência.
 
 ## Endpoints de Conta:
-![account-resource requests](url)
+![account-resource requests](https://github.com/Igor12345ps/avaliacao-full-stack/blob/main/assets/accounts-requests-backend-swagger.png)
 
 Método | Endpoint | Função
 ---------|---------- | ----------
@@ -112,14 +112,14 @@ Método | Endpoint | Função
 **POST** | */accounts* | Cria uma nova conta automaticamente.
 
 ## Schemas de Input e Output de Dados (DTO)
-![requests schemas](url)
+![requests schemas](https://github.com/Igor12345ps/avaliacao-full-stack/blob/main/assets/schemas-requests-backend-swagger.png)
 
 Para saber mais, entre no swagger.
 
 ## Estrutura:
 Optei por usar o padrão de camadas para melhor organização do código, com algumas pastas(packages) auxiliares.
 
-![Estrutura de pastas(package)](url)
+![Estrutura de pastas(package)](https://github.com/Igor12345ps/avaliacao-full-stack/blob/main/assets/estrutura-pastas-backend.png)
 
 Responsabilidades:
 
@@ -152,7 +152,7 @@ Dependências:
 - **React-router-dom** para criação de rotas;
 
 
-# Instruções e obrigações a serem cumpridos
+# Instruções e obrigações a serem cumpridas
 
 ## Entregáveis
  Pequena documentação no README explicando suas decisões arquiteturais, versões de linguagem,
